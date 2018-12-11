@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# AstraLinux SE 1.6, AstraLinux CE 2.12, Ubuntu 18.04, nvidia binary(closed,proprietary) driver installer
+# =======================================================================================================
+# Author: Alexey Kovin <4l3xk3@gmail.com>
+# All rights reserved
+# Russia, Electrostal, 2018
+
+# Localization
+# ------------
+function echo_en () {
+    if [ x"$LANG" != "xru_RU.UTF-8" ]; then
+        echo "$1"
+    fi
+}
+
+function echo_ru () {
+    if [ x"$LANG" = "xru_RU.UTF-8" ]; then
+        echo "$1"
+    fi
+}
+
+# Check EUID
+# ----------
+echo "EUID=$EUID"
+if [ x"$EUID" != "x0" ]; then
+    echo_ru "Запустите программу с правами администратора системы (sudo) (root) .."
+    echo_en "Launch program as administrator (sudo) (root) .."
+    exit 1
+fi
+
+# Xorg config
+# -----------
+echo "Удаление xorg.conf .."
+echo "Removing xorg.conf .."
+if [ -f /etc/X11/xorg.conf ]; then
+    mv -f /etc/X11/xorg.conf /etc/X11/backup-$$-xorg.conf-backup
+    echo_ru "/etc/X11/xorg.conf удален, резервная копия: /etc/X11/backup-$$-xorg.conf-backup"
+    echo_en "/etc/X11/xorg.conf removed, backup version: /etc/X11/backup-$$-xorg.conf-backup"
+else
+    echo_ru "/etc/X11/xorg.conf"
+    echo_en ""
+fi
+dpkg-reconfigure xorg-server
+
+apt install --yes --force-yes nvidia-driver-410 nvidia-settings xserver-xorg-video-nvidia-410
