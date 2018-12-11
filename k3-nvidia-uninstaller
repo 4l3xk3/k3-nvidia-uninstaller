@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# AstraLinux SE 1.6, AstraLinux CE 2.12, Ubuntu 18.04, nvidia/nouveau driver uninstaller
+# ======================================================================================
+# Recommended before binary(closed,proprietary) nvidia driver install 
+# Author: Alexey Kovin <4l3xk3@gmail.com>
+# All rights reserved
+# Russia, Electrostal, 2018
+
+# Localization
+# ------------
+function echo_en () {
+    if [ x"$LANG" != "xru_RU.UTF-8" ]; then
+        echo "$1"
+    fi
+}
+
+function echo_ru () {
+    if [ x"$LANG" = "xru_RU.UTF-8" ]; then
+        echo "$1"
+    fi
+}
+
+# Check EUID
+# ----------
+echo "EUID=$EUID"
+if [ x"$EUID" != "x0" ]; then
+    echo_ru "Запустите программу с правами администратора системы (sudo) (root) .."
+    echo_en "Launch program as administrator (sudo) (root) .."
+    exit 1
+fi
+
+# Xorg config
+# -----------
+echo "Удаление xorg.conf .."
+echo "Removing xorg.conf .."
+if [ -f /etc/X11/xorg.conf ]; then
+    mv -f /etc/X11/xorg.conf /etc/X11/backup-$$-xorg.conf-backup
+    echo_ru "/etc/X11/xorg.conf удален, резервная копия: /etc/X11/backup-$$-xorg.conf-backup"
+    echo_en "/etc/X11/xorg.conf removed, backup version: /etc/X11/backup-$$-xorg.conf-backup"
+else
+    echo_ru "/etc/X11/xorg.conf"
+    echo_en ""
+fi
+dpkg-reconfigure xorg-server
+
+
+# Uninstall deb packets
+# ---------------------
+echo_ru "Поиск и удаление пакетов nvidia .."
+echo_en "Find and uninstall nvidia packets .."
+apt remove --purge --yes --force-yes nvidia*
+apt remove --purge --yes --force-yes libnvidia*
+apt remove --purge --yes --force-yes nouveau*
+apt remove --purge --yes --force-yes xserver-xorg-video-n*
+apt remove --purge --yes --force-yes libdrm-nouv*
+for nvdeb in `dpkg -l | grep nvidia`; do
+    echo_ru "Удаление пакета $nvdeb .."
+    echo_en "Removing packet $nvdeb .."
+    dpkg -purge --yes --force-yes $nvdeb
+done
+
+# Restore original mesa libs and sysmlinks
+# ----------------------------------------
+echo_ru "Восстановление оригинальных версий GL библиотек mesa и символических ссылок"
+echo_en "Restore original mesa GL libs and symlinks"
+sudo apt-get install --reinstall  --yes --force-yes xserver-xorg-core libgl1 libgl1-mesa-dri libgl1-mesa-glx libglapi-mesa libgles2 libgles2-mesa libglew2.0 libglewmx1.13 libglu1-mesa libglvnd0 libglx-mesa0 libglx0
+
+
+# Kernel modules
+# --------------
+echo_ru "Поиск и удаление драйверов nvidia .."
+echo_en "Find and uninstall nvidia drivers .."
+for nvdriver in `find /lib/modules -type f -name "nvidia*"`; do
+    echo "$nvdriver"
+    rm -f $nvdriver
+done
+
+depmod -a
+update-initramfs -u -k all
+
+
