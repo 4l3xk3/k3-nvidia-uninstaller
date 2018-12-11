@@ -4,3 +4,7 @@
 # Author: Alexey Kovin <4l3xk3@gmail.com>
 # All rights reserved
 # Russia, Electrostal, 2018
+
+OpenGL Steam debug:
+export LIBGL_DEBUG=verbose
+
