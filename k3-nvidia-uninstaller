@@ -51,20 +51,18 @@ echo_ru "Поиск и удаление пакетов nvidia .."
 echo_en "Find and uninstall nvidia packets .."
 apt remove --purge --yes --force-yes nvidia*
 apt remove --purge --yes --force-yes libnvidia*
-apt remove --purge --yes --force-yes nouveau*
 apt remove --purge --yes --force-yes xserver-xorg-video-n*
-apt remove --purge --yes --force-yes libdrm-nouv*
 for nvdeb in `dpkg -l | grep nvidia`; do
     echo_ru "Удаление пакета $nvdeb .."
     echo_en "Removing packet $nvdeb .."
-    dpkg -purge --yes --force-yes $nvdeb
+    apt remove --purge --yes --force-yes $nvdeb
 done
 
 # Restore original mesa libs and sysmlinks
 # ----------------------------------------
 echo_ru "Восстановление оригинальных версий GL библиотек mesa и символических ссылок"
 echo_en "Restore original mesa GL libs and symlinks"
-sudo apt-get install --reinstall  --yes --force-yes xserver-xorg-core libgl1 libgl1-mesa-dri libgl1-mesa-glx libglapi-mesa libgles2 libgles2-mesa libglew2.0 libglewmx1.13 libglu1-mesa libglvnd0 libglx-mesa0 libglx0
+sudo apt install --reinstall --yes --force-yes xserver-xorg-core libgl1 libgl1-mesa-dri libgl1-mesa-glx libglapi-mesa libgles2 libgles2-mesa libglew2.0 libglewmx1.13 libglu1-mesa libglvnd0 libglx-mesa0 libglx0
 
 
 # Kernel modules
