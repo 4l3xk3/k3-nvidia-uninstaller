@@ -44,3 +44,6 @@ fi
 dpkg-reconfigure xorg-server
 
 apt install --yes --force-yes nvidia-driver-410 nvidia-settings xserver-xorg-video-nvidia-410
+
+# Steam config
+ln -s /usr/lib32/i386-linux-gnu/ /usr/lib/i386-linux-gnu
