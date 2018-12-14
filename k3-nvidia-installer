@@ -44,7 +44,6 @@ fi
 
 dpkg-reconfigure xorg-server
 
-<<<<<<< HEAD
 CHVAR="1"
 echo_ru "Выберите вариант установки:"
 echo_ru "1 - 390 - Средние видеоадаптеры Nvidia"
