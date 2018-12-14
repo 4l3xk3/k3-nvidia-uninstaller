@@ -31,8 +31,8 @@ fi
 
 # Xorg config
 # -----------
-echo "Удаление xorg.conf .."
-echo "Removing xorg.conf .."
+echo_ru "Удаление xorg.conf .."
+echo_en "Removing xorg.conf .."
 if [ -f /etc/X11/xorg.conf ]; then
     mv -f /etc/X11/xorg.conf /etc/X11/backup-$$-xorg.conf-backup
     echo_ru "/etc/X11/xorg.conf удален, резервная копия: /etc/X11/backup-$$-xorg.conf-backup"
@@ -41,6 +41,30 @@ else
     echo_ru "/etc/X11/xorg.conf"
     echo_en ""
 fi
+
 dpkg-reconfigure xorg-server
 
-apt install --yes --force-yes nvidia-driver-410 nvidia-settings xserver-xorg-video-nvidia-410
+CHVAR="1"
+echo_ru "Выберите вариант установки:"
+echo_ru "1 - 390 - Средние видеоадаптеры Nvidia"
+echo_ru "2 - 410 - Новые видеоадаптеры Nvidia"
+echo_en "Choose install variant:"
+echo_en "1 - 390 - Middle Nvidia videocards"
+echo_en "2 - 410 - New Nvidia videocards"
+
+read CHVAR
+
+case $CHVAR in
+    1)
+        apt install --yes --force-yes nvidia-driver-390 nvidia-settings xserver-xorg-video-nvidia-390
+        ;;
+    2)
+        apt install --yes --force-yes nvidia-driver-410 nvidia-settings xserver-xorg-video-nvidia-410
+        ;;
+    *)
+        apt install --yes --force-yes nvidia-driver-410 nvidia-settings xserver-xorg-video-nvidia-410
+        ;;
+esac
+
+# Steam i386 libs path fix
+ln -s /usr/lib32/i386-linux-gnu/ /usr/lib/i386-linux-gnu

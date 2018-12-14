@@ -71,7 +71,7 @@ echo_ru "Поиск и удаление драйверов nvidia .."
 echo_en "Find and uninstall nvidia drivers .."
 for nvdriver in `find /lib/modules -type f -name "nvidia*"`; do
     echo "$nvdriver"
-    rm -f $nvdriver
+    mv -f $nvdriver ${nvdriver}-$$-backup
 done
 
 depmod -a
