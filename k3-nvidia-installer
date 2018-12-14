@@ -68,9 +68,5 @@ case $CHVAR in
 esac
 
 # Steam i386 libs path fix
-=======
-apt install --yes --force-yes nvidia-driver-410 nvidia-settings xserver-xorg-video-nvidia-410
-
-# Steam config
->>>>>>> 4d990ba57baeaaebd0ff31ed186dc3b48c8aee76
 ln -s /usr/lib32/i386-linux-gnu/ /usr/lib/i386-linux-gnu
+
