@@ -2,7 +2,10 @@ AstraLinux SE 1.6, AstraLinux CE 2.12, Ubuntu 18.04, nvidia driver uninstaller a
 
 Recommended for binary(closed,proprietary) nvidia driver install.
 
-Author: Alexey Kovin <4l3xk3@gmail.com>
+Author: 
+Alexey Kovin <4l3xk3@gmail.com>
+
+Alexey Kovin <akovin@astralinux.ru>
 
 All rights reserved
 
